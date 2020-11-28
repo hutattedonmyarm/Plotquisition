@@ -1,6 +1,8 @@
 # What is this?
 
-This small project attempts to automatically detect the games and topics talked about in the Podquistion episodes of the [Jimquistion](https://soundcloud.com/jimquisition) podcast (or rather, the Jimquisition podcasts, as the Spin-Off Doctors are part of the same feed). Starting with episode 298, the feeds description contains an automatically readable list of games and even timestamps, for each episode. (I'm hoping they're not chaning the format anytime soon or everything breaks down, but oh well).
+This small project attempts to automatically detect the games and topics talked about in the Podquistion episodes of the [Jimquistion](https://soundcloud.com/jimquisition) podcast (or rather, the Jimquisition podcasts, as the Spin-Off Doctors are part of the same feed).
+
+Starting with episode 298, the feeds description contains an automatically readable list of games and even timestamps, for each episode. (I'm hoping they're not chaning the format anytime soon or everything breaks down, but oh well).
 
 # A couple notes:
 

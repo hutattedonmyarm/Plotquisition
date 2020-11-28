@@ -4,6 +4,10 @@ This small project attempts to automatically detect the games and topics talked 
 
 Starting with episode 298, the feeds description contains an automatically readable list of games and even timestamps, for each episode. (I'm hoping they're not chaning the format anytime soon or everything breaks down, but oh well).
 
+# Why are the episode images so weird?
+
+These are the same images, used on Soundcloud. I liked that better than using the default podcast image, or none at all, for every episode
+
 # A couple notes:
 
 - I have absolutely zero affiliation with the Jimquisition or any of the hosts, this is purely a personal project

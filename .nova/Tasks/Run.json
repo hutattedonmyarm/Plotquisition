@@ -1,0 +1,9 @@
+{
+  "actions" : {
+    "run" : {
+      "enabled" : true,
+      "path" : "src\/main.py"
+    }
+  },
+  "identifier" : "C71FC989-6AD7-4FBA-A03F-E4BDD1445848"
+}

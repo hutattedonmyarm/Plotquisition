@@ -54,6 +54,19 @@ def style() -> str:
       display: none;
     }
 
+    footer {
+      text-align: center;
+      position: fixed;
+      bottom: -8px;
+      left: -8px;
+      line-height: 2em;
+      background: rgba(59,6,77,0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 8px 8px 16px 16px;
+      border-radius: 10px;
+    }
+
     @media (max-width: 680px) {
       .episodewrapper {
         grid-template-columns: 1fr;
@@ -103,7 +116,7 @@ def html_for_episode(episode: Episode) -> str:
 
 def body(episodes: List[Episode]) -> str:
   episodelist = ''.join([html_for_episode(e) for e in episodes])
-  return f'<body><main class="episodelist">{episodelist}</main></body>'
+  return f'<body><main class="episodelist">{episodelist}</main><footer><a href="https://github.com/hutattedonmyarm/Plotquisition/">Check me out on Github, I\'m open source</a></footer></body>'
 
 def make_site(episodes: List[Episode], charset: str = 'UTF-8') -> str:
   description = 'Provides an automatically generated list of games, talked about in each episode of the Podquisition podcast'

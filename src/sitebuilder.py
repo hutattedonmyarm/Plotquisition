@@ -61,8 +61,8 @@ def style() -> str:
       left: -8px;
       line-height: 2em;
       background: rgba(59,6,77,0.8);
-      backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
       padding: 8px 8px 16px 16px;
       border-radius: 10px;
     }
@@ -93,6 +93,13 @@ def style() -> str:
     @media (max-width: 1360px) {
       .episodewrapper {
         width: 100%;
+      }
+      footer {
+        bottom: 0;
+        left: 0;
+        padding: 8px;
+        width: 100%;
+        border-radius: 0;
       }
     }
     </style>

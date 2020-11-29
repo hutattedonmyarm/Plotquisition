@@ -16,7 +16,7 @@ jobs:
         python-version: '3.8.x'
         # Optional - x64 or x86 architecture, defaults to x64
         architecture: 'x64'
-    # You can test your matrix by printing the current Python version
     - name: Generate HTML
-      #run: python main.py
       run: python src/main.py
+    - name: Commit new HTML
+      run: git commit index.html -m "Auto updating index.html"

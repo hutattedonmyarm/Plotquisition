@@ -18,5 +18,7 @@ jobs:
         architecture: 'x64'
     - name: Generate HTML
       run: python src/main.py
+    - name: Setting up git
+      run: git config --global user.email "max.nuding@icloud.com" && git config --global user.name "hutattedonmyarm"
     - name: Commit new HTML
       run: git commit index.html -m "Auto updating index.html"

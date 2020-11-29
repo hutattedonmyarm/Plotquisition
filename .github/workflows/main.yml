@@ -27,13 +27,13 @@ jobs:
 
       - name: Setup Python
         uses: actions/setup-python@v2.1.4
-          with:
+        with:
           # Version range or exact version of a Python version to use, using SemVer's version range syntax.
           python-version: 3.8.x # optional, default is 3.x
           # The target architecture (x86, x64) of the Python interpreter.
-          architecture: # optional
+          #architecture: # optional
           # Used to pull python distributions from actions/python-versions. Since there's a default, this is typically not supplied by the user.
-          token: # optional, default is ${{ github.token }}
+          #token: # optional, default is ${{ github.token }}
           
       # Runs a single command using the runners shell
       - name: Run a one-line script

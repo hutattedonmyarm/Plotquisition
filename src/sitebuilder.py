@@ -1,3 +1,4 @@
+import datetime
 import html
 from typing import List
 from episode import Episode, Game
@@ -138,6 +139,7 @@ def make_site(episodes: List[Episode], charset: str = 'UTF-8') -> str:
       <meta property="og:description" content="{description}">
       <meta property="og:title" content="{title}">
       <meta name="twitter:title" content="{title}">
+      <meta property="article:published_time" content="{datetime.datetime.now().isoformat()}" />
       <title>{title}</title>
       {style()}
     </head>

@@ -20,5 +20,7 @@ jobs:
       run: python src/main.py
     - name: Setting up git
       run: git config --global user.email "max.nuding@icloud.com" && git config --global user.name "hutattedonmyarm"
+    - name: View status
+      run: git status
     - name: Commit new HTML
       run: git commit index.html -m "Auto updating index.html"

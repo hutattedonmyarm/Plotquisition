@@ -3,6 +3,7 @@
 import urllib.request
 from episode import Episode
 from sitebuilder import make_site
+import os
 import re
 
 if __name__ == '__main__':
@@ -19,7 +20,9 @@ if __name__ == '__main__':
   #    print('No games found in episode description')
   #  print('==========================')
 
-  with open('index.html', 'w') as f:
+  index_file = os.path.abspath('index.html')
+  print('Generating ' + index_file)
+  with open(index_file, 'w') as f:
     charset = 'UTF-8'
     match = re.search(r'<\?xml .*? encoding="(UTF-8)"\?>', feed.decode('utf-8'))
     if match:

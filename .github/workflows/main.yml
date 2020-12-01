@@ -1,8 +1,8 @@
 name: Python package
 
-on: 
+on:
   push:
-    branches: 
+    branches:
       - main
   schedule:
   - cron: "0 */2 * * 4"
@@ -22,7 +22,7 @@ jobs:
         # Optional - x64 or x86 architecture, defaults to x64
         architecture: 'x64'
     - name: Generate HTML
-      run: python src/main.py
+      run: python plotquisition/main.py
     - name: Commit newly generated HTML
       # You may pin to the exact commit or the version.
       uses: stefanzweifel/git-auto-commit-action@v4.7.2

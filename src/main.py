@@ -3,13 +3,18 @@
 import urllib.request
 from episode import Episode
 from sitebuilder import make_site
+import json
 import os
 import re
 
 if __name__ == '__main__':
   feed = urllib.request.urlopen('http://feeds.soundcloud.com/users/soundcloud:users:125332894/sounds.rss').read()
 
-  episodes = Episode.episodes_from_rss(feed)
+  manual_fixes = {}
+  with open('manual_fixes.json', 'r') as f:
+    manual_fixes = json.load(f)
+
+  episodes = Episode.episodes_from_rss(feed, manual_fixes=manual_fixes)
 
   #for episode in episodes:
   #  print(f'{episode.title}, {episode.pubdate_string}')

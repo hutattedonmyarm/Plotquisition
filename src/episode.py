@@ -1,15 +1,21 @@
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime #RSS dates are RFC 822, which is handled in the email module
 import re
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 timestamp_regex = re.compile('(.*?)\(((\d{1,2}):(\d{2})(:(\d{2}))?)\)(,|\.|\n|$)')
 
 class Game:
-  def __init__(self, name: str, timestamp_string: str):
+  def __init__(self, name: str, timestamp_string: str, timestamp: Optional[int] = None):
     self.name = name
-    self.timestamp_string = timestamp_string
-    self.timestamp = Episode.seconds_from_timestring(timestamp_string)
+    if timestamp is None:
+      self.timestamp_string = timestamp_string
+      self.timestamp = Episode.seconds_from_timestring(timestamp_string)
+    else:
+      m = int(timestamp/60)
+      s = timestamp%60
+      self.timestamp_string = f'{m:02d}:{s:02d}' #Converting to string to convert it back to secs later is dumb
+      self.timestamp = timestamp
 
   # Class 'Game' is not known at the time this is parsed
   # So the return type needs to be declared using forward references,
@@ -30,6 +36,21 @@ class Game:
       games[-1].name = games[-1].name.lstrip(' and ').strip()
     return games
 
+  @staticmethod
+  def from_manual_fixes(manual_fixes: List[Dict[str, Any]]) -> List['Game']:
+    games = []
+    for game in manual_fixes:
+      timestamp_string = None
+      timestamp = None
+      if 'timestamp_string' in game:
+        timestamp_string = game['timestamp_string']
+      else:
+        timestamp = int(game['timestamp'])
+      games.append(Game(
+        name=game['name'],
+        timestamp_string=timestamp_string,
+        timestamp=timestamp))
+    return games
 
   def __str__(self):
     return f'{self.name} @{self.timestamp_string} ({self.timestamp}s)'
@@ -66,7 +87,7 @@ class Episode():
     return sum([int(x)*(60**i) for i,x in enumerate(reversed(timestring.split(':')))])
 
   @staticmethod
-  def episodes_from_rss(feed: str) -> List['Episode']:
+  def episodes_from_rss(feed: str, manual_fixes: Optional[Dict[str, Any]]) -> List['Episode']:
     itunes_ns_regex = re.compile('xmlns:itunes="(.*?)"')
     namespaces = {
       'itunes': itunes_ns_regex.search(feed.decode('utf8')).group(1)
@@ -100,7 +121,7 @@ class Episode():
         duration_string=duration,
         description=description,
         pubdate_string=pubdate)
-      episode.games = Game.from_episode_description(description)
+      episode.games = Game.from_manual_fixes(manual_fixes[url]) if url in manual_fixes else Game.from_episode_description(description)
       episodes.append(episode)
     return episodes
 

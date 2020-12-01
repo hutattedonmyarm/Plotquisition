@@ -21,7 +21,7 @@ def style() -> str:
     }
     .episodewrapper {
       display: grid;
-      grid-template-columns: 300px auto;
+      grid-template-columns: 300px minmax(auto, 400px);
       grid-template-rows: auto 1fr;
       grid-column-gap: 18px;
       margin: 8px;

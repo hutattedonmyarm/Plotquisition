@@ -1,9 +1,12 @@
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime #RSS dates are RFC 822, which is handled in the email module
+import json
 import re
+import urllib.request
 from typing import Any, Dict, List, Optional
 
 timestamp_regex = re.compile('(.*?)\(((\d{1,2}):(\d{2})(:(\d{2}))?)\)(,|\.|\n|$)')
+cover_size_regex = re.compile(r'(t\d+x\d+)|(original)\.jpg$')
 
 class Game:
   def __init__(self, name: str, timestamp_string: str, timestamp: Optional[int] = None):
@@ -87,7 +90,57 @@ class Episode():
     return sum([int(x)*(60**i) for i,x in enumerate(reversed(timestring.split(':')))])
 
   @staticmethod
-  def episodes_from_rss(feed: str, manual_fixes: Optional[Dict[str, Any]]) -> List['Episode']:
+  def _check_if_image_exists(cover_url: str) -> bool:
+    status = -1
+    try:
+      status = urllib.request.urlopen(
+        urllib.request.Request(cover_url, method='HEAD')
+      ).status
+    except Exception as e:
+      #requests throws on not found or any error
+      pass
+    return status == 200
+
+  # Covers can be huge (usually 3000x3000px) for the Podquisition
+  # The URLs are contain the image size though,
+  # so this checks for smaller sizes (200px, 300px, and "original" usually exist)
+  # and uses these if found
+  @staticmethod
+  def find_best_cover(original_cover_url: str) -> str:
+    if not original_cover_url:
+      return original_cover_url
+    match = cover_size_regex.search(original_cover_url)
+    if not match:
+      return original_cover_url
+    size_urls = {
+      'orig': None,
+      '200': None,
+      '300': None,
+    }
+    if match.groups()[0]:
+      #sized
+      size_urls['orig'] = re.sub(cover_size_regex, r'\2original', original_cover_url)
+      size_urls['200'] = re.sub(cover_size_regex, r'\2t200x200', original_cover_url)
+      size_urls['300'] = re.sub(cover_size_regex, r'\2t300x300', original_cover_url)
+    if match.groups()[1]:
+      #original
+      size_urls['orig'] = original_cover_url
+      size_urls['200'] = re.sub(cover_size_regex, r'\1t200x200', original_cover_url)
+      size_urls['300'] = re.sub(cover_size_regex, r'\1t300x300', original_cover_url)
+    if Episode._check_if_image_exists(size_urls['300']):
+      return size_urls['300']
+    if Episode._check_if_image_exists(size_urls['200']):
+      return size_urls['200']
+    if Episode._check_if_image_exists(size_urls['orig']):
+      return size_urls['orig']
+    return original_cover_url
+
+  @staticmethod
+  def episodes_from_rss(
+    feed: str,
+    manual_fixes: Optional[Dict[str, Any]],
+    cover_resizes: Optional[Dict[str, str]]) -> List['Episode']:
+
     itunes_ns_regex = re.compile('xmlns:itunes="(.*?)"')
     namespaces = {
       'itunes': itunes_ns_regex.search(feed.decode('utf8')).group(1)
@@ -106,11 +159,18 @@ class Episode():
       duration = item.find('itunes:duration', namespaces).text
       audio_url = item.find('enclosure').get('url')
       cover_url = None
-      try:
-        cover_url = item.find('itunes:image', namespaces).get('href')
-      except:
-        print(f'Could not find cover for episode "{title}". Using channel cover!')
-        cover_url = channel_cover
+      # Cover sizes are saved, so we don't need to check 300+ URLs
+      # on every run
+      if url in cover_resizes:
+        cover_url = cover_resizes[url]
+      else:
+        try:
+          cover_url = item.find('itunes:image', namespaces).get('href')
+        except:
+          print(f'Could not find cover for episode "{title}". Using channel cover!')
+          cover_url = channel_cover
+        cover_url = Episode.find_best_cover(cover_url)
+        cover_resizes[url] = cover_url
       pubdate = item.find('pubDate').text
       description = item.find('description').text
       episode = Episode(
@@ -123,6 +183,8 @@ class Episode():
         pubdate_string=pubdate)
       episode.games = Game.from_manual_fixes(manual_fixes[url]) if url in manual_fixes else Game.from_episode_description(description)
       episodes.append(episode)
+    with open('cover_resizes.json', 'w') as f:
+      cover_resizes = json.dump(cover_resizes, f, indent=2)
     return episodes
 
   def get_timestamp_url_for_game(self, game: Game) -> str:

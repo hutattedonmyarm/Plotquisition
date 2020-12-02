@@ -108,7 +108,7 @@ def style() -> str:
 
 def html_for_episode(episode: Episode) -> str:
   title = f'<h3 class="title">{html.escape(episode.title)}</h3>'
-  cover_image = f'<img src="{html.escape(episode.cover_url)}" class="episodecover" alt="Cover for episode: {html.escape(episode.title)}"/>'
+  cover_image = f'<img src="{html.escape(episode.cover_url)}" class="episodecover" alt="Cover for episode: {html.escape(episode.title)}" loading="lazy"/>'
 
   games = [f'<li><a href="{html.escape(episode.get_timestamp_url_for_game(g))}">{html.escape(g.timestamp_string)} - {html.escape(g.name)}</a></li>' for g in episode.games]
   subtitle_text = ''

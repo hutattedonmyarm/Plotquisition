@@ -30,4 +30,4 @@ jobs:
         # Commit message
         commit_message: Generated index.html
         # File pattern used for `git add`. For example `src/\*.js`
-        file_pattern: index.html
+        #file_pattern: index.html

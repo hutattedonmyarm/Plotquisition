@@ -128,11 +128,21 @@ class Episode():
       size_urls['200'] = re.sub(cover_size_regex, r'\1t200x200', original_cover_url)
       size_urls['300'] = re.sub(cover_size_regex, r'\1t300x300', original_cover_url)
     if Episode._check_if_image_exists(size_urls['300']):
+      if size_urls['300'].startswith('http://'):
+        https_url = size_urls['300'].replace('http://', 'https://', 1)
+        https_exists = Episode._check_if_image_exists(https_url)
+        return https_url if https_exists else size_urls['300']
       return size_urls['300']
     if Episode._check_if_image_exists(size_urls['200']):
-      return size_urls['200']
+      if size_urls['200'].startswith('http://'):
+        https_url = size_urls['200'].replace('http://', 'https://', 1)
+        https_exists = Episode._check_if_image_exists(https_url)
+      return https_url if https_exists else size_urls['200']
     if Episode._check_if_image_exists(size_urls['orig']):
-      return size_urls['orig']
+      if size_urls['orig'].startswith('http://'):
+        https_url = size_urls['orig'].replace('http://', 'https://', 1)
+        https_exists = Episode._check_if_image_exists(https_url)
+      return https_url if https_exists else size_urls['orig']
     return original_cover_url
 
   @staticmethod

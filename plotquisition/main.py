@@ -14,7 +14,11 @@ if __name__ == '__main__':
   with open('manual_fixes.json', 'r') as f:
     manual_fixes = json.load(f)
 
-  episodes = Episode.episodes_from_rss(feed, manual_fixes=manual_fixes)
+  cover_resizes = {}
+  with open('cover_resizes.json', 'r') as f:
+    cover_resizes = json.load(f)
+
+  episodes = Episode.episodes_from_rss(feed, manual_fixes=manual_fixes, cover_resizes=cover_resizes)
 
   #for episode in episodes:
   #  print(f'{episode.title}, {episode.pubdate_string}')

@@ -8,6 +8,8 @@ class TestGame(unittest.TestCase):
     self.assertEqual(g.name, 'Testgame')
     self.assertEqual(g.timestamp_string, '06:12')
     self.assertEqual(g.timestamp, 372)
+    self.assertEqual(f'{g}', 'Testgame @06:12 (372s)')
+    self.assertEqual(g.__repr__(), 'Testgame @06:12 (372s)')
 
     g = episode.Game('Testgame2', '1:35:00')
     self.assertEqual(g.name, 'Testgame2')
@@ -95,6 +97,3 @@ class TestGame(unittest.TestCase):
       episode.Game('This is only a test', '10:51')
     ]
     self.assertEqual(found_games, expected_games)
-
-if __name__ == '__main__':
-  unittest.main()

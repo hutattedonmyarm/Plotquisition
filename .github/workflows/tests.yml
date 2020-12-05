@@ -17,9 +17,11 @@ jobs:
       uses: actions/setup-python@v2
       with:
         # Semantic version range syntax or exact version of a Python version
-        python-version: '3.8.x'
+        python-version: '3.8'
         # Optional - x64 or x86 architecture, defaults to x64
         architecture: 'x64'
+    run: |
+      echo ::set-env name=PYVER::$(python -c "import sys; print(str(sys.version_info.major) + '.'+str(sys.version_info.minor)+'.'+str(sys.version_info.micro))")
     - uses: actions/cache@v2
       id: cache
       with:
@@ -27,13 +29,22 @@ jobs:
           key: ${{ runner.os }}-pip3-${{ hashFiles('**/requirements-test.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip3-
+    - uses: actions/cache@v2
+      id: cache2
+      with:
+          path: /opt/hostedtoolcache/Python/${{env.PYVER}}/x64/lib/python3.8/site-packages
+          key: ${{ runner.os }}-piphosted-${{ hashFiles('**/requirements-test.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-piphosted-
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true' || steps.cache2.outputs.cache-hit != 'true'
       run:  |
         python -m pip install --upgrade pip
         pip install -r requirements-test.txt
         pip show coverage
     - name: List pip cache
       run: ls ~/.cache/pip
+    - name: List hosted pip cache
+      run: ls /opt/hostedtoolcache/Python/${{env.PYVER}}/x64/lib/python3.8/site-packages
     - name: Run tests
       run: ./test.sh

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - unit-testing
 
 jobs:
   build:

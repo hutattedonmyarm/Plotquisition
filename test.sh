@@ -1,4 +1,4 @@
-coverage run -m py.test
+python -m coverage run -m py.test
 status=$?
 #output=$(coverage report -m)
 #coverage_percent=$(echo "${output}" | grep TOTAL | tr -s ' ' | cut -d' ' -f 4)
@@ -8,5 +8,5 @@ status=$?
 #else
 #  echo "Coverage '${coverage_percent}'";
 #fi
-coverage report -m
+python -m coverage report -m
 exit $status

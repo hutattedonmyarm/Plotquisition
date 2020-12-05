@@ -44,6 +44,7 @@ jobs:
     - name: List pip cache
       run: ls ~/.cache/pip
     - name: List hosted pip cache
-      run: ls /opt/hostedtoolcache/Python/${{env.PYVER}}/x64/lib/python3.8/site-packages
+      #run: ls /opt/hostedtoolcache/Python/${{env.PYVER}}/x64/lib/python3.8/site-packages
+      run: ls ${{ env.pythonLocation }}/lib/python3.8/site-packages
     - name: Run tests
       run: ./test.sh

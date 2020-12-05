@@ -1,7 +1,7 @@
 import datetime
 import html
 from typing import List
-from episode import Episode, Game
+from plotquisition.episode import Episode, Game
 
 def style() -> str:
   return '''

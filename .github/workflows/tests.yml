@@ -18,10 +18,8 @@ jobs:
       with:
         # Semantic version range syntax or exact version of a Python version
         python-version: '3.8'
-        # Optional - x64 or x86 architecture, defaults to x64
-        architecture: 'x64'
-    run: |
-      echo ::set-env name=PYVER::$(python -c "import sys; print(str(sys.version_info.major) + '.'+str(sys.version_info.minor)+'.'+str(sys.version_info.micro))")
+    #run: |
+    #  echo ::set-env name=PYVER::$(python -c "import sys; print(str(sys.version_info.major) + '.'+str(sys.version_info.minor)+'.'+str(sys.version_info.micro))")
     - uses: actions/cache@v2
       id: cache
       with:
@@ -32,7 +30,8 @@ jobs:
     - uses: actions/cache@v2
       id: cache2
       with:
-          path: /opt/hostedtoolcache/Python/${{env.PYVER}}/x64/lib/python3.8/site-packages
+          #path: /opt/hostedtoolcache/Python/${{env.PYVER}}/x64/lib/python3.8/site-packages
+          path: ${{ env.pythonLocation }}/lib/python3.8/site-packages
           key: ${{ runner.os }}-piphosted-${{ hashFiles('**/requirements-test.txt') }}
           restore-keys: |
             ${{ runner.os }}-piphosted-

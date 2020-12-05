@@ -1,5 +1,12 @@
 coverage run -m py.test
 status=$?
+#output=$(coverage report -m)
+#coverage_percent=$(echo "${output}" | grep TOTAL | tr -s ' ' | cut -d' ' -f 4)
+#if [ $coverage_percent == '100%' ]
+#then
+#  echo 'Full coverage';
+#else
+#  echo "Coverage '${coverage_percent}'";
+#fi
 coverage report -m
-#coverage report -m | grep TOTAL | tr -s ' ' | cut -d' ' -f 4
 exit $status

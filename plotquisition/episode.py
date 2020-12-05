@@ -5,7 +5,7 @@ import re
 import urllib.request
 from typing import Any, Dict, List, Optional
 
-timestamp_regex = re.compile('(.*?)\(((\d{1,2}):(\d{2})(:(\d{2}))?)\)(,|\.|\n|$)')
+timestamp_regex = re.compile(r'(.*?)\(((\d{1,2}):(\d{2})(:(\d{2}))?)\)(,|\.|\n|$)')
 cover_size_regex = re.compile(r'(t\d+x\d+)|(original)\.jpg$')
 
 class Game:
@@ -68,6 +68,8 @@ class Game:
 
 
 class Episode():
+  cover_resizes_file = 'cover_resizes.json'
+
   def __init__(
     self,
     url: str,
@@ -85,8 +87,8 @@ class Episode():
     self.title = title
     self.duration_string = duration_string
     self.description = description
-    self.pubdate_string = parsedate_to_datetime(pubdate_string)
-    self.pubdate = description
+    self.pubdate = parsedate_to_datetime(pubdate_string)
+    self.pubdate_string = pubdate_string
     self.duration = Episode.seconds_from_timestring(duration_string)
     self.games: List[Game] = []
 
@@ -118,9 +120,9 @@ class Episode():
     if not match:
       return original_cover_url
     size_urls = {
-      'orig': None,
-      '200': None,
       '300': None,
+      '200': None,
+      'orig': None,
     }
     if match.groups()[0]:
       #sized
@@ -130,31 +132,28 @@ class Episode():
     if match.groups()[1]:
       #original
       size_urls['orig'] = original_cover_url
-      size_urls['200'] = re.sub(cover_size_regex, r'\1t200x200', original_cover_url)
-      size_urls['300'] = re.sub(cover_size_regex, r'\1t300x300', original_cover_url)
-    if Episode._check_if_image_exists(size_urls['300']):
-      if size_urls['300'].startswith('http://'):
-        https_url = size_urls['300'].replace('http://', 'https://', 1)
-        https_exists = Episode._check_if_image_exists(https_url)
-        return https_url if https_exists else size_urls['300']
-      return size_urls['300']
-    if Episode._check_if_image_exists(size_urls['200']):
-      if size_urls['200'].startswith('http://'):
-        https_url = size_urls['200'].replace('http://', 'https://', 1)
-        https_exists = Episode._check_if_image_exists(https_url)
-      return https_url if https_exists else size_urls['200']
-    if Episode._check_if_image_exists(size_urls['orig']):
-      if size_urls['orig'].startswith('http://'):
-        https_url = size_urls['orig'].replace('http://', 'https://', 1)
-        https_exists = Episode._check_if_image_exists(https_url)
-      return https_url if https_exists else size_urls['orig']
+      size_urls['200'] = re.sub(cover_size_regex, r'\1t200x200.jpg', original_cover_url)
+      size_urls['300'] = re.sub(cover_size_regex, r'\1t300x300.jpg', original_cover_url)
+
+    for size in size_urls:
+      if Episode._check_if_image_exists(size_urls[size]):
+        if size_urls[size].startswith('http://'):
+          https_url = size_urls[size].replace('http://', 'https://', 1)
+          https_exists = Episode._check_if_image_exists(https_url)
+          return https_url if https_exists else size_urls[size]
+        return size_urls[size]
     return original_cover_url
 
   @staticmethod
   def episodes_from_rss(
-    feed: str,
-    manual_fixes: Optional[Dict[str, Any]],
-    cover_resizes: Optional[Dict[str, str]]) -> List['Episode']:
+    feed: bytes,
+    manual_fixes: Optional[Dict[str, Any]] = None,
+    cover_resizes: Optional[Dict[str, str]] = None) -> List['Episode']:
+
+    if manual_fixes is None:
+      manual_fixes = []
+    if cover_resizes is None:
+      cover_resizes = {}
 
     itunes_ns_regex = re.compile('xmlns:itunes="(.*?)"')
     namespaces = {
@@ -198,7 +197,8 @@ class Episode():
         pubdate_string=pubdate)
       episode.games = Game.from_manual_fixes(manual_fixes[url]) if url in manual_fixes else Game.from_episode_description(description)
       episodes.append(episode)
-    with open('cover_resizes.json', 'w') as f:
+
+    with open(Episode.cover_resizes_file, 'w') as f:
       cover_resizes = json.dump(cover_resizes, f, indent=2)
     return episodes
 

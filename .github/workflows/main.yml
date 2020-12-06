@@ -37,7 +37,6 @@ jobs:
       run: |
         LAST_BUILD=$(date -r index.html '+%Y-%m-%d %H:%M')
         echo "::set-output name=LAST_BUILD::${LAST_BUILD}"
-    #- run: echo $LAST_BUILD
     - name: Updating badge
       uses: Schneegans/dynamic-badges-action@v1.0.0
       with:
@@ -46,3 +45,5 @@ jobs:
         filename: last_build.json
         label: Updated
         message: ${{ steps.builddate.outputs.LAST_BUILD }}
+        labelColor: blueviolet
+        namedLogo: applepodcasts

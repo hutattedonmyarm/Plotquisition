@@ -1,7 +1,10 @@
 import datetime
 import html
 from typing import List
-from plotquisition.episode import Episode, Game
+try:
+  from episode import Episode, Game
+except ModuleNotFoundError: #During testing the import needs to be done like this
+  from plotquisition.episode import Episode, Game
 
 def style() -> str:
   return '''

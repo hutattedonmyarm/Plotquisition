@@ -1,7 +1,5 @@
-# Current status:
 ![Unit tests](https://github.com/hutattedonmyarm/Plotquisition/workflows/Unit%20tests/badge.svg?event=push)
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/hutattedonmyarm/8c97860b962cecec2f16ccf1b5a87554/raw/last_build.json)
-
 
 # What is this?
 

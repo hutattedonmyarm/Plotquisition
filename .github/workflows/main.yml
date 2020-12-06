@@ -31,3 +31,12 @@ jobs:
         commit_message: Generated index.html
         # File pattern used for `git add`. For example `src/\*.js`
         #file_pattern: index.html
+    - run: LAST_BUILD="$(date -r index.html '+$Y-%m-%d %H:%M')" >> $GITHUB_ENV
+    - name: Updating badge
+      uses: Schneegans/dynamic-badges-action@v1.0.0
+      with:
+        auth: ${{ secrets.GIST_TOKEN }}
+        gistID: 8c97860b962cecec2f16ccf1b5a87554
+        filename: last_build.json
+        label: Updated
+        message: ${{ env.LAST_BUILD }}

@@ -31,7 +31,9 @@ jobs:
         commit_message: Generated index.html
         # File pattern used for `git add`. For example `src/\*.js`
         #file_pattern: index.html
-    - run: LAST_BUILD="$(date -r index.html '+$Y-%m-%d %H:%M')" >> $GITHUB_ENV
+    - run: date -r plotquisition/index.html '+$Y-%m-%d %H:%M'
+    - run: LAST_BUILD="$(date -r plotquisition/index.html '+$Y-%m-%d %H:%M')" >> $GITHUB_ENV
+    - run: echo $LAST_BUILD
     - name: Updating badge
       uses: Schneegans/dynamic-badges-action@v1.0.0
       with:

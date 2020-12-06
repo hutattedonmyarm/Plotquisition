@@ -118,13 +118,33 @@ def html_for_episode(episode: Episode) -> str:
   else:
     subtitle_text = 'No games found in episode description'
     gamelist_class += ' empty'
-  gamelist = f'<div class="{gamelist_class}"><span>{subtitle_text}</span><ul>{"".join(games)}</ul></div>'
+  games_str = '\n'.join(games)
+  gamelist = f'''
+  <div class="{gamelist_class}">
+    <span>{subtitle_text}</span>
+    <ul>
+      {games_str}
+    </ul>
+  </div>'''
 
-  return f'<section class="episodewrapper">{title}{cover_image}{gamelist}</section>'
+  return f'''
+  <section class="episodewrapper">
+    {title}
+    {cover_image}
+    {gamelist}
+  </section>'''
 
 def body(episodes: List[Episode]) -> str:
-  episodelist = ''.join([html_for_episode(e) for e in episodes])
-  return f'<body><main class="episodelist">{episodelist}</main><footer><a href="https://github.com/hutattedonmyarm/Plotquisition/">Check me out on Github, I\'m open source</a></footer></body>'
+  episodelist = '\n'.join([html_for_episode(e) for e in episodes])
+  return f'''
+  <body>
+    <main class="episodelist">
+      {episodelist}
+    </main>
+    <footer>
+      <a href="https://github.com/hutattedonmyarm/Plotquisition/">Check me out on Github, I'm open source</a>
+    </footer>
+  </body>'''
 
 def make_site(episodes: List[Episode], charset: str = 'UTF-8') -> str:
   description = 'Provides an automatically generated list of games, talked about in each episode of the Podquisition podcast'
@@ -133,12 +153,12 @@ def make_site(episodes: List[Episode], charset: str = 'UTF-8') -> str:
   <!DOCTYPE html>
   <html lang="en-US">
     <head>
-      <meta charset="{html.escape(charset)}">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="{description}">
-      <meta property="og:description" content="{description}">
-      <meta property="og:title" content="{title}">
-      <meta name="twitter:title" content="{title}">
+      <meta charset="{html.escape(charset)}" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="description" content="{description}" />
+      <meta property="og:description" content="{description}" />
+      <meta property="og:title" content="{title}" />
+      <meta name="twitter:title" content="{title}" />
       <meta property="article:published_time" content="{datetime.datetime.now().isoformat()}" />
       <title>{title}</title>
       {style()}

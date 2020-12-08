@@ -32,10 +32,10 @@ jobs:
         # File pattern used for `git add`. For example `src/\*.js`
         #file_pattern: index.html
     - run: date -r index.html '+%Y-%m-%d %H:%M'
-    - run: LAST_BUILD="$(date -r index.html '+%Y-%m-%d %H:%M')" >> $GITHUB_ENV
+    - run: LAST_BUILD="$(date -r index.html '+%Y-%m-%d %H:%M %Z')" >> $GITHUB_ENV
     - id: builddate
       run: |
-        LAST_BUILD=$(date -r index.html '+%Y-%m-%d %H:%M')
+        LAST_BUILD=$(date -r index.html '+%Y-%m-%d %H:%M %Z')
         echo "::set-output name=LAST_BUILD::${LAST_BUILD}"
     - name: Updating badge
       uses: Schneegans/dynamic-badges-action@v1.0.0

@@ -8,7 +8,11 @@ import os
 import re
 
 if __name__ == '__main__':
-  feed = urllib.request.urlopen('http://feeds.soundcloud.com/users/soundcloud:users:125332894/sounds.rss').read()
+  try:
+    feed = urllib.request.urlopen('http://feeds.soundcloud.com/users/soundcloud:users:125332894/sounds.rss').read()
+  except urllib.error.HTTPError as e:
+    print(f'Error fetching RSS: {e.code}: {e.reason}')
+    sys.exit(1)
 
   manual_fixes = {}
   with open('manual_fixes.json', 'r') as f:

@@ -17,7 +17,12 @@ class Game:
     else:
       m = int(timestamp/60)
       s = timestamp%60
-      self.timestamp_string = f'{m:02d}:{s:02d}' #Converting to string to convert it back to secs later is dumb
+      if m > 60:
+        h = int(m/60)
+        m = int(m%60)
+        self.timestamp_string = f'{h:d}:{m:02d}:{s:02d}' #Converting to string to convert it back to secs later is dumb
+      else:
+        self.timestamp_string = f'{m:02d}:{s:02d}' #Converting to string to convert it back to secs later is dumb
       self.timestamp = timestamp
 
   # Class 'Game' is not known at the time this is parsed

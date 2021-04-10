@@ -33,7 +33,14 @@ class Game:
       for match in matches:
         game = match.group(1).strip()
         ts = match.group(2)
-        games.append(Game(name = game, timestamp_string=ts))
+        # Splits format min:sec into its components,
+        # Reverses the list so seconds come first, then minutes, then hours,
+        # multiplies each by 60^index (so 60^0 = 1 for seconds, 60^1 = 60 for minutes, 60^2 = 3660 for hours, ...)
+        # Sums up all the seconds
+        # Gives the total seconds for this timestamp
+        ts_seconds = sum((int(x[1])*60**int(x[0]) for x in enumerate(reversed(ts.split(':')))))
+        # Use seconds instead of timestamp string so I can format it
+        games.append(Game(name = game, timestamp_string=ts, timestamp=ts_seconds))
     if games:
       games[0].name = games[0].name.lstrip('Games we played this week include:').strip()
       games[-1].name = games[-1].name.lstrip(' and ').strip()

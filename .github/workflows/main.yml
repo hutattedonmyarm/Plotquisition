@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python 3.x
       uses: actions/setup-python@v2
       with:
@@ -25,7 +25,7 @@ jobs:
       run: python plotquisition/main.py
     - name: Commit newly generated HTML
       # You may pin to the exact commit or the version.
-      uses: stefanzweifel/git-auto-commit-action@v4.7.2
+      uses: stefanzweifel/git-auto-commit-action@v5
       with:
         # Commit message
         commit_message: Generated index.html
@@ -38,7 +38,7 @@ jobs:
         LAST_BUILD=$(date -r index.html '+%Y-%m-%d %H:%M %Z')
         echo "::set-output name=LAST_BUILD::${LAST_BUILD}"
     - name: Updating badge
-      uses: Schneegans/dynamic-badges-action@v1.0.0
+      uses: Schneegans/dynamic-badges-action@v1
       with:
         auth: ${{ secrets.GIST_TOKEN }}
         gistID: 8c97860b962cecec2f16ccf1b5a87554

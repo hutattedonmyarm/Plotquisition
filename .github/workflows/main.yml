@@ -35,7 +35,7 @@ jobs:
       - id: builddate
         run: |
           LAST_BUILD=$(date -r index.html '+%Y-%m-%d %H:%M %Z')
-          echo "::set-output name=LAST_BUILD::${LAST_BUILD}"
+          echo "LAST_BUILD=${LAST_BUILD}" >> $GITHUB_OUTPUT
       - name: Updating badge
         uses: Schneegans/dynamic-badges-action@v1.7.0
         with:

@@ -12,7 +12,7 @@ import sys
 
 if __name__ == '__main__':
   try:
-    feed = urllib.request.urlopen('http://feeds.soundcloud.com/users/soundcloud:users:125332894/sounds.rss').read()
+    feed = urllib.request.urlopen('https://feed.podbean.com/jimquisition/feed.xml').read()
   except urllib.error.HTTPError as e:
     print(f'Error fetching RSS: {e.code}: {e.reason}')
     sys.exit(1)

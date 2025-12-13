@@ -5,7 +5,7 @@ import re
 import urllib.request
 from typing import Any, Dict, List, Optional
 
-timestamp_regex = re.compile(r'(.*?)\(((\d{1,2}):(\d{2})(:(\d{2}))?)\)(,|\.|\n|$)')
+timestamp_regex = re.compile(r'(.*?)\(((\d{1,2}):(\d{2})(:(\d{2}))?)\)(,|\.|\n| .*|$)')
 cover_size_regex = re.compile(r'(t\d+x\d+)|(original)\.jpg$')
 
 class Game:
@@ -36,8 +36,12 @@ class Game:
       line = line.strip()
       matches = timestamp_regex.finditer(line)
       for match in matches:
-        game = match.group(1).strip()
+        g1 = match.group(1)
         ts = match.group(2)
+        if g1:
+          game = g1.strip()
+        else:
+          game = match.group(7).strip()
         # Splits format min:sec into its components,
         # Reverses the list so seconds come first, then minutes, then hours,
         # multiplies each by 60^index (so 60^0 = 1 for seconds, 60^1 = 60 for minutes, 60^2 = 3660 for hours, ...)

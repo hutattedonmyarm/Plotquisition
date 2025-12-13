@@ -36,10 +36,10 @@ class Game:
       line = line.strip()
       matches = timestamp_regex.finditer(line)
       for match in matches:
-        print('Match in line', line, match, match.group(1), match.group(2), match.group(7))
+        #print('Match in line', line, match, match.group(1), match.group(2), match.group(7))
         g1 = match.group(1)
         ts = match.group(2)
-        if g1:
+        if g1 and g1 != '<p>':
           game = g1.strip()
         else:
           game = match.group(7).strip()

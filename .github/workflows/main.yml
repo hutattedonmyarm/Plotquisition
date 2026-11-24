@@ -14,17 +14,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.x
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           # Semantic version range syntax or exact version of a Python version
-          python-version: '3.8.x'
+          python-version: '3.15.x'
           # Optional - x64 or x86 architecture, defaults to x64
           architecture: 'x64'
       - name: Generate HTML
         run: python plotquisition/main.py
       - name: Commit newly generated HTML
         # You may pin to the exact commit or the version.
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           # Commit message
           commit_message: Generated index.html
@@ -37,7 +37,7 @@ jobs:
           LAST_BUILD=$(date -r index.html '+%Y-%m-%d %H:%M %Z')
           echo "LAST_BUILD=${LAST_BUILD}" >> $GITHUB_OUTPUT
       - name: Updating badge
-        uses: Schneegans/dynamic-badges-action@v1.7.0
+        uses: Schneegans/dynamic-badges-action@v1.9.0
         with:
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: 8c97860b962cecec2f16ccf1b5a87554
